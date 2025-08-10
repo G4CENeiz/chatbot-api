@@ -31,7 +31,7 @@ Route.post('/questions', 'ConversationsController.sendQuestion')
 Route.get('/conversation', 'ConversationsController.getAllConversations')
 
 // Route to get a specific conversation by ID or UUID
-Route.get('/conversation/:id_or_uuid', 'ConversationsController.getConversationMessages')
+Route.get('/conversation/:id_or_uuid', 'ConversationsController.getConversationById')
 
 // Route to delete a specific conversation by ID
 // This is a "Nilai Plus" route as per the original specification

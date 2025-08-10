@@ -194,20 +194,11 @@ export default class ConversationsController {
    * 500:
    * description: Internal server error.
    */
-  public async getAllConversations({ request, response }: HttpContextContract) {
+  public async getAllConversations({ response }: HttpContextContract) {
     try {
-      const { sessionId, page = 1, limit = 10 } = request.qs()
-
-      // Preload the actual last message object for richer data if needed
-      const query = Conversation.query().preload('lastMessage')
-
-      if (sessionId) {
-        query.where('session_id', sessionId)
-      }
-
-      const conversations = await query.paginate(page, limit)
-
-      return response.ok(conversations.serialize())
+      const conversations = await Conversation.all()
+      
+      return response.ok(conversations)
     } catch (error) {
       console.error('Error in getAllConversations:', error)
       return response.internalServerError({ message: 'Failed to retrieve conversations.', error: error.message })
@@ -282,35 +273,29 @@ export default class ConversationsController {
    * 500:
    * description: Internal server error.
    */
-  public async getConversationMessages({ params, response }: HttpContextContract) {
-    const idOrUuid = params.id
+  public async getConversationById({ params, response }: HttpContextContract) {
+    const idOrUuid = params.id_or_uuid
 
     try {
-      let conversation: Conversation | null
+      let conversations: Conversation[] | null
 
       // Check if the parameter is a valid UUID
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idOrUuid)
 
       if (isUUID) {
-        conversation = await Conversation.query()
+        conversations = await Conversation.query()
           .where('session_id', idOrUuid)
-          .preload('lastMessage') // Only preload the last message as per schema
-          .first()
       } else {
-        // Assume it's a primary key (integer)
-        conversation = await Conversation.query()
+        conversations = await Conversation.query()
           .where('id', idOrUuid)
-          .preload('lastMessage') // Only preload the last message as per schema
-          .first()
       }
 
-      if (!conversation) {
+      if (!conversations) {
         return response.notFound({ message: 'Conversation not found.' })
       }
 
-      // Since there's no direct 'hasMany' relationship from Conversation to Message
-      // based on your migration, we can only return the conversation and its single last message.
-      return response.ok(conversation.serialize())
+      return response.ok(conversations)
+
     } catch (error) {
       console.error('Error in getConversationMessages:', error)
       return response.internalServerError({ message: 'Failed to retrieve conversation details.', error: error.message })
