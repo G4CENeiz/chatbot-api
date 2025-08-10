@@ -71,6 +71,10 @@ To start the AdonisJS development server with file watching, run the following c
 
     node ace serve --watch
 
+or you can run the following command:
+
+    npm run dev
+
 The API will be available at http://localhost:3333.
 
 ## API Endpoints
