@@ -13,7 +13,7 @@ export default class Conversation extends BaseModel {
   public messagesId: number | null
 
   @column({ columnName: 'last_messages' })
-  public lastMessages: string | null // Nullable as per migration
+  public lastMessages: JSON | null // Nullable as per migration
 
   @belongsTo(() => Message, {
     foreignKey: 'messages_id',

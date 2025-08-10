@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.uuid('session_id').notNullable().unique()
       table.integer('messages_id').unsigned().references('id').inTable('messages').onDelete('SET NULL').nullable()
-      table.text('last_messages').nullable()
+      table.jsonb('last_messages').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
