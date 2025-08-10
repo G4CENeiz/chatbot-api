@@ -56,9 +56,9 @@ Open the newly created .env file and update the database connection details to m
     DB_CONNECTION=pg
     PG_HOST=localhost
     PG_PORT=5432
-    PG_USER=postgres
-    PG_PASSWORD=postgres
-    PG_DB_NAME=postgres
+    PG_USER=chatbot_user
+    PG_PASSWORD=atminB0s!
+    PG_DB_NAME=chatbot_db
 
 ### Run database migrations:    
 This will create the necessary conversations and messages tables inside the running Docker container's database.
