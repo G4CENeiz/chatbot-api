@@ -92,7 +92,7 @@ export default class ConversationsController {
       // Removed 'const userMessage =' as the variable was not used after creation.
       await Message.create({
         senderType: 'user',
-        message: userQuestion,
+        message: <JSON><unknown>JSON.stringify({"message": userQuestion}),
       })
 
       // 2. Make request to external chatbot API
@@ -107,7 +107,7 @@ export default class ConversationsController {
 
         // Assuming the external API returns the bot's message in a 'message' field
         if (externalApiResponse.data && externalApiResponse.data.message) {
-          botResponseText = externalApiResponse.data.message
+          botResponseText = externalApiResponse.data
         } else {
           console.warn('External API response did not contain a "message" field:', externalApiResponse.data)
         }
@@ -121,7 +121,7 @@ export default class ConversationsController {
       // Note: No conversationId is passed to Message.create as per your migration
       const botMessage = await Message.create({
         senderType: 'bot',
-        message: botResponseText,
+        message: <JSON><unknown>JSON.stringify({"message": botResponseText}),
       })
 
       // 4. Update the conversation with the last message's ID and text
